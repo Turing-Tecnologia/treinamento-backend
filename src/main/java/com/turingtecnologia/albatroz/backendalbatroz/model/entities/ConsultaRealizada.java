@@ -28,6 +28,11 @@ public class ConsultaRealizada implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente_consulta_realizada")
     private Cliente clienteConsultaRealizada;
+    
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_dentista_consulta_realizada")
+    private Dentista dentistaConsultaRealizada;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "data_consulta_realizada", nullable = false)
@@ -53,6 +58,7 @@ public class ConsultaRealizada implements Serializable {
         this.checkInConsultaRelizada = consulta.getCheckInConsulta();
         this.checkOutConsultaRelizada = consulta.getCheckOutConsulta();
         this.clienteConsultaRealizada = consulta.getClienteConsulta();
+        this.dentistaConsultaRealizada = consulta.getDentistaConsulta();
         this.dataConsultaRelizada = consulta.getDataConsulta();
         this.numeroFichaConsultaRelizada = consulta.getNumeroFichaConsulta();
         this.especialidadeConsultaRelizada = consulta.getEspecialidadeConsulta();
@@ -60,5 +66,8 @@ public class ConsultaRealizada implements Serializable {
 
     public String getNomeClienteConsultaRealizada(){
         return clienteConsultaRealizada.getNomeCliente();
+    }
+    public String getNomeDentistaConsultaRealizada(){
+        return dentistaConsultaRealizada.getNomeDentista();
     }
 }

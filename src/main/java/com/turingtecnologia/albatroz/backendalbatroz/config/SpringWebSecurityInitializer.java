@@ -60,7 +60,8 @@ public class SpringWebSecurityInitializer extends WebSecurityConfigurerAdapter {
                         "/swagger-ui.html",
                         "/webjars/**",
                         "/clientes/**",
-                        "/consultas/**")
+                        "/consultas/**",
+                		"/dentistas/**")
                 .permitAll()
 
                 // Qualquer outra requisição deve ser checada
