@@ -1,11 +1,13 @@
 package com.turingtecnologia.albatroz.backendalbatroz.services.implementations;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.TimeZone;
 
 import org.springframework.stereotype.Service;
 
 import com.turingtecnologia.albatroz.backendalbatroz.exceptions.error.ResourceNotFoundException;
+import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Consulta;
 import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Dentista;
 import com.turingtecnologia.albatroz.backendalbatroz.model.jpaRepositoy.ConsultaRepository;
 import com.turingtecnologia.albatroz.backendalbatroz.model.jpaRepositoy.DentistaRepository;
@@ -16,28 +18,34 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class DentistaServiceImplementation implements DentistaService {
-    final DentistaRepository repository;
+    final DentistaRepository dentistaRepository;
 
     final ConsultaRepository consultaRepository;
 
     @Override
     public Dentista addDentista(Dentista dentista){
-        return repository.save(dentista);
+        return dentistaRepository.save(dentista);
     }
-
+    
     @Override
-    public Dentista findByCpfDentista(String cpf) {
-        verificaSeDentistaExiste(cpf);
-        Dentista dentista = repository.findByCpfDentista(cpf);
-        dentista.getConsultasDentista().clear();
-        dentista.setConsultasDentista(consultaRepository.
-        		findByDentistaConsultaAndDataConsultaOrderByDataConsultaDesc(dentista, geraDataAtual()));
-        return repository.findByCpfDentista(cpf);
+    public List<Dentista> findAllDentistas() {
+        List<Dentista> dentistas = dentistaRepository.findAll();
+        for (Dentista dentista : dentistas) {
+        	dentista.getConsultasRealizadasDentista().clear();
+        }
+        return dentistaRepository.findAll();
     }
 
-    private void verificaSeDentistaExiste(String cpf) {
-        if (repository.findByCpfDentista(cpf) == null) {
-            throw new ResourceNotFoundException("Não existe dentista com esse CPF: " + cpf);
+    
+    @Override
+    public Dentista findByIdDentista(Long id) {
+        vericaSeDentistaExiste(id);
+        return dentistaRepository.findByIdDentista(id);
+    }
+
+    private void vericaSeDentistaExiste(long id) {
+        if (dentistaRepository.findByIdDentista(id) == null) {
+            throw new ResourceNotFoundException("Não existe dentista com esse ID: " + id);
         }
     }
 
