@@ -11,4 +11,5 @@
 - os endpoints da API estarão disponíveis em: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
 *Obs. 1: Há restrição dos dias de salvar consultas para terças e quintas. Ao testar, remova a restrição na classe "ConsultaServiceImplementation.java"*
+
 *Obs. 2: O Albatroz foi testado com a OpenJDK 11(LTS)+JVM HotSpot. Em testes com a OpenJ9 ocorreu dump de memória. Não foi testado na GraalVM.*
