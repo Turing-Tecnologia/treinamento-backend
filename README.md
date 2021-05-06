@@ -9,6 +9,10 @@
 - execute `mvn package -DskipTests` no terminal na pasta do projeto
 - execute `java -jar target/backend-albatroz-0.0.1-SNAPSHOT.jar` no terminal na pasta do projeto
 
+Lembrete: o sistema restringe os dias de salvar para terças e quintas. Ao testar, remova essa restrição na classe "ConsultaServiceImplementation.java"
+
 Os endpoints da API estarão disponíveis em: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+
+
 
 *Obs.: O Albatroz foi testado com a OpenJDK 11(LTS)+JVM HotSpot. Em testes com a OpenJ9 ocorreu dump de memória. Não foi testado na GraalVM.*
