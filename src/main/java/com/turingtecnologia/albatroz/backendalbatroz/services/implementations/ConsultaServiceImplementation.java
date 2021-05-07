@@ -1,6 +1,5 @@
 package com.turingtecnologia.albatroz.backendalbatroz.services.implementations;
 
-import com.turingtecnologia.albatroz.backendalbatroz.dto.InfoConsultaDTO;
 import com.turingtecnologia.albatroz.backendalbatroz.exceptions.error.ResourceNotAcceptableException;
 import com.turingtecnologia.albatroz.backendalbatroz.exceptions.error.ResourceNotFoundException;
 import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Cliente;
@@ -14,13 +13,9 @@ import com.turingtecnologia.albatroz.backendalbatroz.model.jpaRepositoy.Consulta
 import com.turingtecnologia.albatroz.backendalbatroz.services.interfaces.ConsultaService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -66,7 +61,7 @@ public class ConsultaServiceImplementation implements ConsultaService {
         return consultaRepository.save(consulta);
     }
 
-    @Override
+    /*@Override
     public List<InfoConsultaDTO> converter(Set<Consulta> consultas) {
         if(CollectionUtils.isEmpty(consultas)){
             return Collections.emptyList();
@@ -88,7 +83,7 @@ public class ConsultaServiceImplementation implements ConsultaService {
                     .build();
                     return dto;
                 }).collect(Collectors.toList());
-    }
+    }*/
 
     @Override
     public void remove(Long id) {

@@ -30,6 +30,7 @@ public class ConsultaRealizada implements Serializable {
     @JoinColumn(name = "id_cliente_consulta_realizada")
     private Cliente clienteConsultaRealizada;
 
+    @JsonBackReference(value = "clinica-consulta")
     @ManyToOne
     @JoinColumn(name = "id_clinica_consulta_realizada")
     private Clinica clinicaConsultaRealizada;

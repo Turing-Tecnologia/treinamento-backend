@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,6 +44,7 @@ public class Clinica implements Serializable{
     @Column(name = "cnpj", nullable = false)
     private String cnpj;
     
+    @JsonManagedReference(value = "clinica-consulta")
     @OneToMany(mappedBy = "clinicaConsulta", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private Set<Consulta> consultasMarcadas;
 

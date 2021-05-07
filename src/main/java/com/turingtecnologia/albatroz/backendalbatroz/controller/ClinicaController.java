@@ -3,10 +3,8 @@ package com.turingtecnologia.albatroz.backendalbatroz.controller;
 import javax.validation.Valid;
 
 import com.turingtecnologia.albatroz.backendalbatroz.dto.ClinicaDTO;
-import com.turingtecnologia.albatroz.backendalbatroz.dto.InfoClinicaDTO;
 import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Clinica;
 import com.turingtecnologia.albatroz.backendalbatroz.services.interfaces.ClinicaService;
-import com.turingtecnologia.albatroz.backendalbatroz.services.interfaces.ConsultaService;
 
 import org.hibernate.validator.constraints.br.CNPJ;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,37 +26,24 @@ public class ClinicaController {
     @Autowired
     private ClinicaService service;
 
-    @Autowired
-    private ConsultaService consultaService;
-
     @GetMapping("/{cnpj}")
-    public ResponseEntity<InfoClinicaDTO> getClinica(@PathVariable("cnpj") @CNPJ String cnpj){
-        return new ResponseEntity<>(converter(service.getClinica(cnpj)), HttpStatus.CREATED);
+    public ResponseEntity<Clinica> getClinica(@PathVariable("cnpj") @CNPJ String cnpj){
+        return new ResponseEntity<>(service.getClinica(cnpj), HttpStatus.CREATED);
     }
 
     @PostMapping
-    public ResponseEntity<InfoClinicaDTO> adicionarClinica(@RequestBody @Valid ClinicaDTO dto){
-        return new ResponseEntity<>(converter(service.salvar(dto)),HttpStatus.CREATED);
+    public ResponseEntity<Clinica> adicionarClinica(@RequestBody @Valid ClinicaDTO dto){
+        return new ResponseEntity<>(service.salvar(dto),HttpStatus.CREATED);
     }
 
     @PutMapping("/{cnpj}")
-    public ResponseEntity<InfoClinicaDTO> editarClinica(@PathVariable("cnpj") @CNPJ String cnpj, @RequestBody @Valid ClinicaDTO dto){
-        return new ResponseEntity<>(converter(service.editar(cnpj,dto)), HttpStatus.CREATED);
+    public ResponseEntity<Clinica> editarClinica(@PathVariable("cnpj") @CNPJ String cnpj, @RequestBody @Valid ClinicaDTO dto){
+        return new ResponseEntity<>(service.editar(cnpj,dto), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{cnpj}")
     public ResponseEntity<Void> removerClinica(@PathVariable("cnpj") @CNPJ String cnpj){
         service.excluir(cnpj);
         return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    public InfoClinicaDTO converter(Clinica clinica){
-        return InfoClinicaDTO.builder()
-                    .nomeClinica(clinica.getNomeClinica())
-                    .telefone(clinica.getTelefone())
-                    .email(clinica.getEmail())
-                    .cnpj(clinica.getCnpj())
-                    .consultas(consultaService.converter(clinica.getConsultasMarcadas()))
-                    .build();
     }
 }

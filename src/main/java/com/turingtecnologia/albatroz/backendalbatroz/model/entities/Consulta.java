@@ -31,6 +31,7 @@ public class Consulta implements Serializable {
     @JoinColumn(name = "id_cliente_consulta")
     private Cliente clienteConsulta;
 
+    @JsonBackReference(value = "clinica-consulta")
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_clinica_consulta")
     private Clinica clinicaConsulta;
