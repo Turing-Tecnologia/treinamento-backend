@@ -2,7 +2,6 @@ package com.turingtecnologia.albatroz.backendalbatroz.controller;
 
 import javax.validation.Valid;
 
-import com.sendgrid.Response;
 import com.turingtecnologia.albatroz.backendalbatroz.dto.ClinicaDTO;
 import com.turingtecnologia.albatroz.backendalbatroz.dto.InfoClinicaDTO;
 import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Clinica;
