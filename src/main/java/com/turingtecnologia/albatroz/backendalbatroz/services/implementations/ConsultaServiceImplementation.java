@@ -1,5 +1,6 @@
 package com.turingtecnologia.albatroz.backendalbatroz.services.implementations;
 
+import com.turingtecnologia.albatroz.backendalbatroz.dto.InfoConsultaDTO;
 import com.turingtecnologia.albatroz.backendalbatroz.exceptions.error.ResourceNotAcceptableException;
 import com.turingtecnologia.albatroz.backendalbatroz.exceptions.error.ResourceNotFoundException;
 import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Cliente;
@@ -19,6 +20,8 @@ import javassist.NotFoundException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -62,6 +65,27 @@ public class ConsultaServiceImplementation implements ConsultaService {
             consulta.setNumeroFichaConsulta(getNumeroFicha(consulta.getDataConsulta()));
         }
         return consultaRepository.save(consulta);
+    }
+
+    @Override
+    public List<InfoConsultaDTO> converter(Set<Consulta> consultas) {
+        return consultas.stream()
+                .map(consulta -> {
+                    Clinica clinica = consulta.getClinicaConsulta();
+                    Cliente cliente = consulta.getClienteConsulta();
+                    InfoConsultaDTO dto = InfoConsultaDTO.builder()
+                    .nomeClinica(clinica.getNomeClinica())
+                    .nomeCliente(cliente.getNomeCliente())
+                    .checkInConsulta(consulta.getCheckInConsulta())
+                    .checkOutConsulta(consulta.getCheckOutConsulta())
+                    .dataConsulta(consulta.getDataConsulta())
+                    .especialidadeConsulta(consulta.getEspecialidadeConsulta())
+                    .numeroFichaConsulta(consulta.getNumeroFichaConsulta())
+                    .cpfCliente(cliente.getCpfCliente())
+                    .contato(cliente.getContatoCliente())
+                    .build();
+                    return dto;
+                }).collect(Collectors.toList());
     }
 
     @Override

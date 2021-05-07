@@ -4,8 +4,10 @@ import javax.validation.Valid;
 
 import com.sendgrid.Response;
 import com.turingtecnologia.albatroz.backendalbatroz.dto.ClinicaDTO;
+import com.turingtecnologia.albatroz.backendalbatroz.dto.InfoClinicaDTO;
 import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Clinica;
 import com.turingtecnologia.albatroz.backendalbatroz.services.interfaces.ClinicaService;
+import com.turingtecnologia.albatroz.backendalbatroz.services.interfaces.ConsultaService;
 
 import org.hibernate.validator.constraints.br.CNPJ;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +29,12 @@ public class ClinicaController {
     @Autowired
     private ClinicaService service;
 
+    @Autowired
+    private ConsultaService consultaService;
+
     @GetMapping("/{cnpj}")
-    public ResponseEntity<Clinica> getClinica(@PathVariable("CNPJ") @CNPJ String cnpj){
-        return new ResponseEntity<>(service.getClinica(cnpj), HttpStatus.CREATED);
+    public ResponseEntity<InfoClinicaDTO> getClinica(@PathVariable("cnpj") String cnpj){
+        return new ResponseEntity<>(converter(service.getClinica(cnpj)), HttpStatus.CREATED);
     }
 
     @PostMapping
@@ -43,8 +48,18 @@ public class ClinicaController {
     }
 
     @DeleteMapping("/{cnpj}")
-    public ResponseEntity<Void> removerClinica(@PathVariable("CNPJ") @CNPJ String cnpj){
+    public ResponseEntity<Void> removerClinica(@PathVariable("cnpj") @CNPJ String cnpj){
         service.excluir(cnpj);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    public InfoClinicaDTO converter(Clinica clinica){
+        return InfoClinicaDTO.builder()
+                    .nomeClinica(clinica.getNomeClinica())
+                    .telefone(clinica.getTelefone())
+                    .email(clinica.getEmail())
+                    .cnpj(clinica.getCnpj())
+                    .consultas(consultaService.converter(clinica.getConsultasMarcadas()))
+                    .build();
     }
 }

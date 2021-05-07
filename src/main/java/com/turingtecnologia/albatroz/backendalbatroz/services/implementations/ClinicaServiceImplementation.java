@@ -21,7 +21,7 @@ public class ClinicaServiceImplementation implements ClinicaService{
     @Override
     @Transactional
     public Clinica editar(ClinicaDTO dto) {
-        if(clinicaRepo.findByCNPJClinica(dto.getCnpj()) != null)
+        if(clinicaRepo.findByCnpj(dto.getCnpj()) != null)
         {
             return clinicaRepo.save(converterDTO(dto));
         }
@@ -33,18 +33,19 @@ public class ClinicaServiceImplementation implements ClinicaService{
     @Override
     @Transactional
     public void excluir(String CNPJ) {
-        clinicaRepo.delete(clinicaRepo.findByCNPJClinica(CNPJ));
+        clinicaRepo.delete(clinicaRepo.findByCnpj(CNPJ));
     }
 
     @Override
     @Transactional
     public Clinica getClinica(String CNPJ) {
-        return clinicaRepo.findByCNPJClinica(CNPJ);
+        return clinicaRepo.findByCnpj(CNPJ);
     }
 
     @Override
     @Transactional
     public Clinica salvar(ClinicaDTO dto) {
+        dto.setCnpj(dto.getCnpj().replaceAll("[./-]", ""));
         return clinicaRepo.save(converterDTO(dto));
     }
 
