@@ -38,13 +38,13 @@ public class ClinicaController {
     }
 
     @PostMapping
-    public ResponseEntity<Clinica> adicionarClinica(@RequestBody @Valid ClinicaDTO dto){
-        return new ResponseEntity<>(service.salvar(dto),HttpStatus.CREATED);
+    public ResponseEntity<InfoClinicaDTO> adicionarClinica(@RequestBody @Valid ClinicaDTO dto){
+        return new ResponseEntity<>(converter(service.salvar(dto)),HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<Clinica> editarClinica(@RequestBody @Valid ClinicaDTO dto){
-        return new ResponseEntity<>(service.editar(dto), HttpStatus.CREATED);
+    public ResponseEntity<InfoClinicaDTO> editarClinica(@RequestBody @Valid ClinicaDTO dto){
+        return new ResponseEntity<>(converter(service.editar(dto)), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{cnpj}")

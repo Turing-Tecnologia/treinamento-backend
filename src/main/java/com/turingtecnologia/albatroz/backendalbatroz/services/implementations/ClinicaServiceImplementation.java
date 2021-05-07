@@ -32,26 +32,31 @@ public class ClinicaServiceImplementation implements ClinicaService{
 
     @Override
     @Transactional
-    public void excluir(String CNPJ) {
-        clinicaRepo.delete(clinicaRepo.findByCnpj(CNPJ));
+    public void excluir(String cnpj) {
+        cnpj = tratarCNPJ(cnpj);
+        clinicaRepo.delete(clinicaRepo.findByCnpj(cnpj));
     }
 
     @Override
     @Transactional
-    public Clinica getClinica(String CNPJ) {
-        return clinicaRepo.findByCnpj(CNPJ);
+    public Clinica getClinica(String cnpj) {
+        return clinicaRepo.findByCnpj(cnpj);
     }
 
     @Override
     @Transactional
     public Clinica salvar(ClinicaDTO dto) {
-        dto.setCnpj(dto.getCnpj().replaceAll("[./-]", ""));
+        dto.setCnpj(tratarCNPJ(dto.getCnpj()));
         return clinicaRepo.save(converterDTO(dto));
     }
 
     private Clinica converterDTO(ClinicaDTO dto){
         Clinica clinica = new ModelMapper().map(dto, Clinica.class);
         return clinica;
+    }
+
+    private String tratarCNPJ(String cnpj){
+        return cnpj.replaceAll("[./-]", "");
     }
     
 }

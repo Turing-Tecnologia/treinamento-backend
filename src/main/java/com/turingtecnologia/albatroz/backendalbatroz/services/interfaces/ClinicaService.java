@@ -8,7 +8,7 @@ public interface ClinicaService {
 
     Clinica editar(ClinicaDTO dto);
 
-    void excluir(String CNPJ);
+    void excluir(String cnpj);
 
-    Clinica getClinica(String CNPJ);
+    Clinica getClinica(String cnpj);
 }

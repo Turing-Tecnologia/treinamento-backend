@@ -14,10 +14,12 @@ import com.turingtecnologia.albatroz.backendalbatroz.model.jpaRepositoy.Consulta
 import com.turingtecnologia.albatroz.backendalbatroz.services.interfaces.ConsultaService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javassist.NotFoundException;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -69,6 +71,9 @@ public class ConsultaServiceImplementation implements ConsultaService {
 
     @Override
     public List<InfoConsultaDTO> converter(Set<Consulta> consultas) {
+        if(CollectionUtils.isEmpty(consultas)){
+            return Collections.emptyList();
+        }
         return consultas.stream()
                 .map(consulta -> {
                     Clinica clinica = consulta.getClinicaConsulta();
