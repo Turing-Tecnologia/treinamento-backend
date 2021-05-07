@@ -1,7 +1,5 @@
 package com.turingtecnologia.albatroz.backendalbatroz.services.implementations;
 
-import java.util.Optional;
-
 import com.turingtecnologia.albatroz.backendalbatroz.dto.ClinicaDTO;
 import com.turingtecnologia.albatroz.backendalbatroz.exceptions.error.ResourceNotFoundException;
 import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Clinica;
