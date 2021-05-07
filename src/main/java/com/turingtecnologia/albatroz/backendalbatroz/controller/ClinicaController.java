@@ -32,7 +32,7 @@ public class ClinicaController {
     private ConsultaService consultaService;
 
     @GetMapping("/{cnpj}")
-    public ResponseEntity<InfoClinicaDTO> getClinica(@PathVariable("cnpj") String cnpj){
+    public ResponseEntity<InfoClinicaDTO> getClinica(@PathVariable("cnpj") @CNPJ String cnpj){
         return new ResponseEntity<>(converter(service.getClinica(cnpj)), HttpStatus.CREATED);
     }
 
@@ -41,9 +41,9 @@ public class ClinicaController {
         return new ResponseEntity<>(converter(service.salvar(dto)),HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<InfoClinicaDTO> editarClinica(@RequestBody @Valid ClinicaDTO dto){
-        return new ResponseEntity<>(converter(service.editar(dto)), HttpStatus.CREATED);
+    @PutMapping("/{cnpj}")
+    public ResponseEntity<InfoClinicaDTO> editarClinica(@PathVariable("cnpj") @CNPJ String cnpj, @RequestBody @Valid ClinicaDTO dto){
+        return new ResponseEntity<>(converter(service.editar(cnpj,dto)), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{cnpj}")

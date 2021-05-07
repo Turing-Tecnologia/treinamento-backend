@@ -6,7 +6,7 @@ import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Clinica;
 public interface ClinicaService {
     Clinica salvar(ClinicaDTO dto);
 
-    Clinica editar(ClinicaDTO dto);
+    Clinica editar(String cnpj, ClinicaDTO dto);
 
     void excluir(String cnpj);
 

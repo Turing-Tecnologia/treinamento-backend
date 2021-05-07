@@ -20,14 +20,15 @@ public class ClinicaServiceImplementation implements ClinicaService{
 
     @Override
     @Transactional
-    public Clinica editar(ClinicaDTO dto) {
-        if(clinicaRepo.findByCnpj(dto.getCnpj()) != null)
-        {
-            return clinicaRepo.save(converterDTO(dto));
-        }
-        else{
-            throw new ResourceNotFoundException("Esta clinica não existe!");
-        }
+    public Clinica editar(String cnpj, ClinicaDTO dto) {
+        cnpj = tratarCNPJ(cnpj);
+        Clinica clinica = clinicaRepo.findByCnpj(cnpj);
+        clinica.setCnpj(dto.getCnpj());
+        clinica.setEmail(dto.getEmail());
+        clinica.setNomeClinica(dto.getNomeClinica());
+        clinica.setTelefone(dto.getTelefone());
+        clinicaRepo.save(clinica);
+        return clinica;
     }
 
     @Override
