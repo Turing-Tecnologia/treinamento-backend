@@ -1,5 +1,7 @@
 package com.turingtecnologia.albatroz.backendalbatroz.services.implementations;
 
+import java.util.Optional;
+
 import com.turingtecnologia.albatroz.backendalbatroz.dto.ClinicaDTO;
 import com.turingtecnologia.albatroz.backendalbatroz.exceptions.error.ResourceNotFoundException;
 import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Clinica;
@@ -22,7 +24,8 @@ public class ClinicaServiceImplementation implements ClinicaService{
     @Transactional
     public Clinica editar(String cnpj, ClinicaDTO dto) {
         cnpj = tratarCNPJ(cnpj);
-        Clinica clinica = clinicaRepo.findByCnpj(cnpj);
+        Clinica clinica = clinicaRepo.findByCnpj(cnpj)
+                .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada esta clinica!"));
         clinica.setCnpj(dto.getCnpj());
         clinica.setEmail(dto.getEmail());
         clinica.setNomeClinica(dto.getNomeClinica());
@@ -35,13 +38,16 @@ public class ClinicaServiceImplementation implements ClinicaService{
     @Transactional
     public void excluir(String cnpj) {
         cnpj = tratarCNPJ(cnpj);
-        clinicaRepo.delete(clinicaRepo.findByCnpj(cnpj));
+        Clinica clinica = clinicaRepo.findByCnpj(cnpj)
+            .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada esta clinica!"));
+        clinicaRepo.delete(clinica);
     }
 
     @Override
     @Transactional
     public Clinica getClinica(String cnpj) {
-        return clinicaRepo.findByCnpj(cnpj);
+        return clinicaRepo.findByCnpj(cnpj)
+            .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada esta clinica!"));
     }
 
     @Override
