@@ -23,6 +23,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
+/**
+ * Sim é necessario estar logado para acessar este crud!
+ */
 @RestController
 @RequestMapping("/admin/clinicas")
 public class ClinicaController {
