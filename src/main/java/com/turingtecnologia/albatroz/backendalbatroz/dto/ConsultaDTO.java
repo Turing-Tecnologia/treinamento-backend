@@ -1,6 +1,8 @@
 package com.turingtecnologia.albatroz.backendalbatroz.dto;
 
 import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Cliente;
+import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Clinica;
+
 import lombok.Data;
 
 import java.util.Calendar;
@@ -11,19 +13,22 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class ConsultaDTO {
-    @NotBlank(message ="Check In " + "{not.blank}")
+    @NotNull(message ="Check In " + "{not.blank}")
     private Date checkInConsulta;
 
-    @NotBlank(message = "Check Out " + "{not.blank}")
+    @NotNull(message = "Check Out " + "{not.blank}")
     private Date checkOutConsulta;
 
-    @NotBlank(message = "Data da consulta " + "{not.blank}")
+    @NotNull(message = "Data da consulta " + "{not.blank}")
     private Calendar dataConsulta;
+
+    @NotNull(message = "Clinica " + "{not.blank}")
+    private Clinica clinica;
 
     @NotBlank(message = "Especialidade da consulta " + "{not.blank}")
     private String especialidadeConsulta;
 
-    @NotBlank(message = "Numero da Ficha da consulta " + "{not.blank}")
+    @NotNull(message = "Numero da Ficha da consulta " + "{not.blank}")
     private int numeroFichaConsulta;
 
     @NotNull(message = "{cliente.not.null}")

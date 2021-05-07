@@ -2,6 +2,8 @@ package com.turingtecnologia.albatroz.backendalbatroz.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +31,10 @@ public class Consulta implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente_consulta")
     private Cliente clienteConsulta;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_clinica_consulta")
+    private Clinica clinicaConsulta;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "data_consulta", nullable = false)

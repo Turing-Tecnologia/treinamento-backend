@@ -3,6 +3,9 @@ package com.turingtecnologia.albatroz.backendalbatroz.controller;
 import javax.validation.Valid;
 
 import com.turingtecnologia.albatroz.backendalbatroz.dto.ConsultaDTO;
+import com.turingtecnologia.albatroz.backendalbatroz.dto.InfoConsultaDTO;
+import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Cliente;
+import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Clinica;
 import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Consulta;
 import com.turingtecnologia.albatroz.backendalbatroz.services.interfaces.ConsultaService;
 import io.swagger.annotations.ApiOperation;
@@ -28,9 +31,10 @@ public class ConsultaController {
             @ApiResponse(code = 500, message = "Erro ao processar o cadastro.")
     })
     @PostMapping
-    public ResponseEntity<Consulta> salva(@Valid @RequestBody ConsultaDTO consultaDTO) {
+    public ResponseEntity<InfoConsultaDTO> salva(@Valid @RequestBody ConsultaDTO consultaDTO) {
         Consulta consulta = new ModelMapper().map(consultaDTO, Consulta.class);
-        return new ResponseEntity<>(consultaService.addConsulta(consulta), HttpStatus.CREATED);
+        
+        return new ResponseEntity<>(converter(consultaService.addConsulta(consulta)), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Realizar uma busca de consulta, pelo id da consulta.")
@@ -40,8 +44,8 @@ public class ConsultaController {
             @ApiResponse(code = 500, message = "Erro ao processar a busca.")
     })
     @GetMapping(value = "/{idConsulta}")
-    public ResponseEntity<Consulta> busca(@PathVariable("idConsulta") Long id) {
-        return new ResponseEntity<>(consultaService.findByIdConsulta(id), HttpStatus.OK);
+    public ResponseEntity<InfoConsultaDTO> busca(@PathVariable("idConsulta") Long id) {
+        return new ResponseEntity<>(converter(consultaService.findByIdConsulta(id)), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Deleta a consulta do banco de dados, pelo id da consulta.")
@@ -66,5 +70,21 @@ public class ConsultaController {
     public ResponseEntity<Consulta> altera(@Valid @RequestBody ConsultaDTO consultaDTO) {
         Consulta consulta = new ModelMapper().map(consultaDTO, Consulta.class);
         return new ResponseEntity<>(consultaService.alteraConsulta(consulta), HttpStatus.CREATED);
+    }
+
+    public InfoConsultaDTO converter(Consulta consulta){
+        Cliente cliente = consulta.getClienteConsulta();
+        Clinica clinica = consulta.getClinicaConsulta();
+        return InfoConsultaDTO.builder()
+                        .nomeClinica(clinica.getNomeClinica())
+                        .nomeCliente(cliente.getNomeCliente())
+                        .checkInConsulta(consulta.getCheckInConsulta())
+                        .checkOutConsulta(consulta.getCheckOutConsulta())
+                        .dataConsulta(consulta.getDataConsulta())
+                        .especialidadeConsulta(consulta.getEspecialidadeConsulta())
+                        .numeroFichaConsulta(consulta.getNumeroFichaConsulta())
+                        .cpfCliente(cliente.getCpfCliente())
+                        .contato(cliente.getContatoCliente())
+                        .build();
     }
 }

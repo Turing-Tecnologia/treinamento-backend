@@ -3,17 +3,22 @@ package com.turingtecnologia.albatroz.backendalbatroz.services.implementations;
 import com.turingtecnologia.albatroz.backendalbatroz.exceptions.error.ResourceNotAcceptableException;
 import com.turingtecnologia.albatroz.backendalbatroz.exceptions.error.ResourceNotFoundException;
 import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Cliente;
+import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Clinica;
 import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Consulta;
 import com.turingtecnologia.albatroz.backendalbatroz.model.entities.ConsultaRealizada;
 import com.turingtecnologia.albatroz.backendalbatroz.model.jpaRepositoy.ClienteRepository;
+import com.turingtecnologia.albatroz.backendalbatroz.model.jpaRepositoy.ClinicaRepository;
 import com.turingtecnologia.albatroz.backendalbatroz.model.jpaRepositoy.ConsultaRealizadaRepository;
 import com.turingtecnologia.albatroz.backendalbatroz.model.jpaRepositoy.ConsultaRepository;
 import com.turingtecnologia.albatroz.backendalbatroz.services.interfaces.ConsultaService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javassist.NotFoundException;
+
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -21,12 +26,16 @@ public class ConsultaServiceImplementation implements ConsultaService {
     private final ConsultaRepository consultaRepository;
     private final ConsultaRealizadaRepository consultaRealizadaRepository;
     private final ClienteRepository clienteRepository;
+    private final ClinicaRepository clinicaRepository;
 
     @Override
     public Consulta addConsulta(Consulta consulta) {
         Cliente cliente = clienteRepository.findByCpfCliente(consulta.getClienteConsulta().getCpfCliente());
+        Clinica clinica = clinicaRepository.findById(consulta.getClinicaConsulta().getIdClinica())
+                                            .orElseThrow(() -> new ResourceNotAcceptableException("clinica não encontrada!"));
+        consulta.setClinicaConsulta(clinica);
         consulta.setClienteConsulta(cliente);
-        if (eDiaValido(consulta.getDataConsulta()) && clienteJaAgendado(consulta)) {
+        if (clienteJaAgendado(consulta)) {
             consulta.setNumeroFichaConsulta(getNumeroFicha(consulta.getDataConsulta()));
             return consultaRepository.save(consulta);
         } else if (!clienteJaAgendado(consulta)) {
