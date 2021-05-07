@@ -10,5 +10,5 @@ public interface ClinicaService {
 
     void excluir(String CNPJ);
 
-    void getClinica(String CNPJ);
+    Clinica getClinica(String CNPJ);
 }

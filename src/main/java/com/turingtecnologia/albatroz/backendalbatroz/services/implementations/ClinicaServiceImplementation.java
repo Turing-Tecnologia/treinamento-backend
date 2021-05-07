@@ -1,11 +1,14 @@
 package com.turingtecnologia.albatroz.backendalbatroz.services.implementations;
 
 import com.turingtecnologia.albatroz.backendalbatroz.dto.ClinicaDTO;
+import com.turingtecnologia.albatroz.backendalbatroz.exceptions.error.ResourceNotFoundException;
 import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Clinica;
 import com.turingtecnologia.albatroz.backendalbatroz.model.jpaRepositoy.ClinicaRepository;
 import com.turingtecnologia.albatroz.backendalbatroz.services.interfaces.ClinicaService;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,27 +19,38 @@ public class ClinicaServiceImplementation implements ClinicaService{
     private final ClinicaRepository clinicaRepo;
 
     @Override
+    @Transactional
     public Clinica editar(ClinicaDTO dto) {
-        // TODO Auto-generated method stub
-        return null;
+        if(clinicaRepo.findByCNPJClinica(dto.getCnpj()) != null)
+        {
+            return clinicaRepo.save(converterDTO(dto));
+        }
+        else{
+            throw new ResourceNotFoundException("Esta clinica não existe!");
+        }
     }
 
     @Override
+    @Transactional
     public void excluir(String CNPJ) {
-        // TODO Auto-generated method stub
-        
+        clinicaRepo.delete(clinicaRepo.findByCNPJClinica(CNPJ));
     }
 
     @Override
-    public void getClinica(String CNPJ) {
-        // TODO Auto-generated method stub
-        
+    @Transactional
+    public Clinica getClinica(String CNPJ) {
+        return clinicaRepo.findByCNPJClinica(CNPJ);
     }
 
     @Override
+    @Transactional
     public Clinica salvar(ClinicaDTO dto) {
-        // TODO Auto-generated method stub
-        return null;
+        return clinicaRepo.save(converterDTO(dto));
+    }
+
+    private Clinica converterDTO(ClinicaDTO dto){
+        Clinica clinica = new ModelMapper().map(dto, Clinica.class);
+        return clinica;
     }
     
 }

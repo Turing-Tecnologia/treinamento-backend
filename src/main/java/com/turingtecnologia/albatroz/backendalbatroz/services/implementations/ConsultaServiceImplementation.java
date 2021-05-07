@@ -55,17 +55,13 @@ public class ConsultaServiceImplementation implements ConsultaService {
     public Consulta alteraConsulta(Consulta consulta) {
         vericaSeConsultaExiste(consulta.getIdConsulta());
         Consulta consultaAntiga = consultaRepository.findByIdConsulta(consulta.getIdConsulta());
-        if (eDiaValido(consulta.getDataConsulta())) {
-            if (!datasIguais(consulta.getDataConsulta(), consultaAntiga.getDataConsulta())) {
-                consultaRepository.delete(consultaAntiga);
-                deletarNumeroDaFicha(consultaAntiga.getDataConsulta());
-                consulta.setIdConsulta(null);
-                consulta.setNumeroFichaConsulta(getNumeroFicha(consulta.getDataConsulta()));
-            }
-            return consultaRepository.save(consulta);
-        } else {
-            throw new ResourceNotAcceptableException("Ops não é dia valido.");
+        if (!datasIguais(consulta.getDataConsulta(), consultaAntiga.getDataConsulta())) {
+            consultaRepository.delete(consultaAntiga);
+            deletarNumeroDaFicha(consultaAntiga.getDataConsulta());
+            consulta.setIdConsulta(null);
+            consulta.setNumeroFichaConsulta(getNumeroFicha(consulta.getDataConsulta()));
         }
+        return consultaRepository.save(consulta);
     }
 
     @Override
