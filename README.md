@@ -1,5 +1,9 @@
 # Backend da aplicação da clínica de odontologia (codinome Albatroz).
 
+## Aviso
+
+Modifiquei algumas classes para se adequar, peço perdão se isso acabar por desmantelar ou fugir do assunto.
+
 ## Como sou executado localmente?
 - instale o [Java](https://adoptopenjdk.net/)
 - instale o [PostgreSQL+pgAdmin](https://www.postgresql.org/download/), com senha.
