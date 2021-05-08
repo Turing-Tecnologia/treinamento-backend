@@ -30,6 +30,10 @@ public class Consulta implements Serializable {
     @JoinColumn(name = "id_cliente_consulta")
     private Cliente clienteConsulta;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_clinica_consulta")
+    private Clinica clinicaConsulta;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "data_consulta", nullable = false)
     private Calendar dataConsulta;
