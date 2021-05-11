@@ -15,4 +15,6 @@ public interface DentistaService {
 	void removeDentista(Dentista dentista);
 	
 	Dentista alteraDentista(Dentista dentista);
+	
+	Dentista findByCpfDentista(String cpf);
 }
