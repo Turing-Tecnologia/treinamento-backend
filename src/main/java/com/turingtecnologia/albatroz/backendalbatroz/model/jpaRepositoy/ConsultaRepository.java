@@ -21,6 +21,8 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
     List<Consulta> findByDataConsultaOrderByNumeroFichaConsulta(Calendar dataConsulta);
 
     List<Consulta> findByClienteConsulta(Cliente cliente);
+    
+    List<Consulta> findByDentistaConsulta(Dentista dentista);
 
     Set<Consulta> findByClienteConsultaAndDataConsultaOrderByDataConsultaDesc(Cliente cliente, Calendar geraDataAtual);
     
