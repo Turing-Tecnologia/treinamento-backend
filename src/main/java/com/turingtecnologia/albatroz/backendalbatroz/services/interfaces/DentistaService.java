@@ -11,4 +11,8 @@ public interface DentistaService {
 	Dentista findByIdDentista(Long id);
 	
 	List<Dentista> findAllDentistas();
+	
+	void removeDentista(Dentista dentista);
+	
+	Dentista alteraDentista(Dentista dentista);
 }
