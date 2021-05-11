@@ -1,5 +1,6 @@
 package com.turingtecnologia.albatroz.backendalbatroz.dto;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
@@ -10,6 +11,7 @@ import lombok.Data;
 @Data
 public class ClinicaDTO {
     @NotBlank(message = "CNPJ {not.blank}")
+    @Digits(integer = 14, fraction = 0, message = "{cnpj.limit.value}")
     @CNPJ(message = "{cnpj.not.valid}")
     String cnpjClinica;
 
