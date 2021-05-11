@@ -8,19 +8,20 @@ import org.springframework.stereotype.Service;
 
 import com.turingtecnologia.albatroz.backendalbatroz.exceptions.error.ResourceNotFoundException;
 import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Consulta;
+import com.turingtecnologia.albatroz.backendalbatroz.model.entities.ConsultaRealizada;
 import com.turingtecnologia.albatroz.backendalbatroz.model.entities.Dentista;
 import com.turingtecnologia.albatroz.backendalbatroz.model.jpaRepositoy.ConsultaRepository;
 import com.turingtecnologia.albatroz.backendalbatroz.model.jpaRepositoy.DentistaRepository;
 import com.turingtecnologia.albatroz.backendalbatroz.services.interfaces.DentistaService;
+import com.turingtecnologia.albatroz.backendalbatroz.model.jpaRepositoy.ConsultaRealizadaRepository;
 
 import lombok.AllArgsConstructor;
-@SuppressWarnings("unused")
 @Service
 @AllArgsConstructor
 public class DentistaServiceImplementation implements DentistaService {
-    final DentistaRepository dentistaRepository;
-
-    final ConsultaRepository consultaRepository;
+    private final DentistaRepository dentistaRepository;
+    private final ConsultaRealizadaRepository consultaRealizadaRepository;
+    private final ConsultaRepository consultaRepository;
 
     @Override
     public Dentista addDentista(Dentista dentista){
@@ -42,13 +43,56 @@ public class DentistaServiceImplementation implements DentistaService {
         vericaSeDentistaExiste(id);
         return dentistaRepository.findByIdDentista(id);
     }
+    
+    @Override
+    public Dentista findByCpfDentista(String cpf) {
+    	verificaSeDentistaExiste(cpf);
+        Dentista dentista = dentistaRepository.findByCpfDentista(cpf);
+        dentista.getConsultasDentista().clear();
+        dentista.setConsultasDentista(consultaRepository.
+            	findByDentistaConsultaAndDataConsultaOrderByDataConsultaDesc(dentista, geraDataAtual()));
+        	return dentistaRepository.findByCpfDentista(cpf);
+        }
 
     private void vericaSeDentistaExiste(long id) {
         if (dentistaRepository.findByIdDentista(id) == null) {
             throw new ResourceNotFoundException("Não existe dentista com esse ID: " + id);
         }
     }
+    private void verificaSeDentistaExiste(String cpf) {
+  	  if (dentistaRepository.findByCpfDentista(cpf) == null) {
+  		  throw new ResourceNotFoundException("Não existe dentista com esse CPF: " + cpf);
+  	  	}
+    }
 
+    @Override
+    public void removeDentista(Dentista dentista) {
+    	dentista.setIdDentista(dentistaRepository.
+                findByCpfDentista(dentista.getCpfDentista()).getIdDentista());
+    	verificaSeDentistaExiste(dentista.getCpfDentista());
+        removeConsultasDentista(dentista);
+        dentistaRepository.delete(dentista);
+    }
+    
+      private void removeConsultasDentista(Dentista dentista) {
+          List<Consulta> consultasMarcadas = consultaRepository.findByDentistaConsulta(dentista);
+          List<ConsultaRealizada> consultasRealizadas = consultaRealizadaRepository.findByDentistaConsultaRealizada(dentista);
+          for (ConsultaRealizada consultaRealizada : consultasRealizadas) {
+              consultaRealizadaRepository.delete(consultaRealizada);
+          }
+          for (Consulta consulta : consultasMarcadas) {
+              consultaRepository.delete(consulta);
+          }
+      }
+      
+      @Override
+      public Dentista alteraDentista(Dentista dentista) {
+    	  verificaSeDentistaExiste(dentista.getCpfDentista());
+          dentista.setIdDentista(dentistaRepository.findByCpfDentista(dentista.getCpfDentista()).getIdDentista());
+          return dentistaRepository.save(dentista);
+      }
+
+      
     private Calendar geraDataAtual() {
         Calendar data = Calendar.getInstance();
         data.clear();
@@ -63,4 +107,5 @@ public class DentistaServiceImplementation implements DentistaService {
         data.set(Calendar.MILLISECOND, 0);
         return data;
     }
+
 }
